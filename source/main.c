@@ -20,15 +20,15 @@ int main(void) {
     PORTC = 0x00;	//Initialize PORTC output to 0's
 
     unsigned char tempA = 0x00;	//Temporary variable to hold value of A
-    unsigned char cntavail = 0; //Counter for avaiable spaces
+    unsigned char cntavail = 0x00; //Counter for avaiable spaces
     /* Insert your solution below */
     while (1) {
 	//1) Read Input
 	tempA = PINA & 0x0F;
-	cntavail = 4;
+	cntavail = 0x04;
 
 	//2) Perform Computation
-	if((tempA & 0x01) && (tempA & 0x02) && (tempA & 0x04) && (tempA & 0x08)){	//If all spots are occupied, decrement by 4      
+/*	if((tempA & 0x01) && (tempA & 0x02) && (tempA & 0x04) && (tempA & 0x08)){	//If all spots are occupied, decrement by 4      
                 cntavail = cntavail - 4;
        	}
 	else if(((tempA & 0x01) && (tempA & 0x02) && (tempA & 0x04)) || ((tempA & 0x01) && (tempA & 0x02) && (tempA & 0x08)) || ((tempA & 0x01) && (tempA & 0x04) && (tempA & 0x08)) || ((tempA & 0x02) && (tempA & 0x04) && (tempA & 0x08))){	//If 3 spots are occupied, decrement by 3
@@ -42,6 +42,19 @@ int main(void) {
         }
 	else{
 		//Does nothing cntavail is 4
+	}
+*/
+	if(tempA & 0x01){
+		cntavail = cntavail - 0x01;
+	}
+	if(tempA & 0x02){
+		cntavail = cntavail - 0x01;
+	}
+	if(tempA & 0x04){
+		cntavail = cntavail - 0x01;
+	}
+	if(tempA & 0x08){
+		cntavail = cntavail - 0x01;
 	}
 
 	//3) Write Output
