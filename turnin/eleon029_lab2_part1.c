@@ -1,8 +1,8 @@
-/*	Author: eleon029
- *  Partner(s) Name: 
- *	Lab Section:
- *	Assignment: Lab #  Exercise #
- *	Exercise Description: [optional - include for your own benefit]
+/*	Author & Email: Edwin M. Leon Du, eleon029@ucr.edu
+ *  	Partner(s) Name: 
+ *	Lab Section: 23
+ *	Assignment: Lab 2  Exercise 1
+ *	Exercise Description: Garage door exercise
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
