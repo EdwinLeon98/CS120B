@@ -25,15 +25,23 @@ int main(void) {
     /* Insert your solution below */
     while (1) {
 	//1) Read Input
-	tempA = PINA & 0x01;
+	tempA = PINA & 0x03;
 	
 	//2) Perform Computation
-	//If PA0 is 1, set PB1PB0 = 01, else 10
-	if(tempA == 0x01){	//True if PA0 is 1
-		tempB = (tempB & 0xFC) | 0x01;	//Sets tempB to bbbbbb01 (clear right most 2 bits, then set to 01)
+	//If PA1PA0 is 00, set PB0 = 0
+	if(tempA == 0x00){	//True if PA1PA0 = 00
+		tempB = tempB & 0xFE;	//Sets tempB to bbbbbbb0
+	}
+	else if(tempA == 0x01){
+		tempB = (tempB & 0xFE) | 0x01;	//Sets tempB to bbbbbbb1 (clear right most bit, then set to 1)
+	}
+	else if(tempA == 0x02){
+		tempB = tempB & 0xFE;   //Sets tempB to bbbbbbb0
+	}
+	else if(tempA == 0x03){
+		tempB = tempB & 0xFE;   //Sets tempB to bbbbbbb0
 	}
 	else{
-		tempB = (tempB & 0xFC) | 0x02;	//Sets tempB to bbbbbb10 (clear right most 2 bits, then set to 10)
 	}
 	
 	//3) Write Output
