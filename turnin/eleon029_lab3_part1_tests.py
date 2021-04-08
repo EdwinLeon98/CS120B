@@ -1,8 +1,8 @@
 #      Author & Email: Edwin M. Leon Du, eleon029@ucr.edu
 #      Partner(s) Name: 
 #      Lab Section: 23
-#      Assignment: Lab 2  Exercise 2
-#      Exercise Description: Parking sensor exercise tests
+#      Assignment: Lab 3  Exercise 1
+#      Exercise Description: Counting 1's exercise tests
 #
 #      I acknowledge all content contained herein, excluding template or example
 #      code, is my own original work.
