@@ -28,22 +28,6 @@ int main(void) {
 	cntavail = 0x04;
 
 	//2) Perform Computation
-/*	if((tempA & 0x01) && (tempA & 0x02) && (tempA & 0x04) && (tempA & 0x08)){	//If all spots are occupied, decrement by 4      
-                cntavail = cntavail - 4;
-       	}
-	else if(((tempA & 0x01) && (tempA & 0x02) && (tempA & 0x04)) || ((tempA & 0x01) && (tempA & 0x02) && (tempA & 0x08)) || ((tempA & 0x01) && (tempA & 0x04) && (tempA & 0x08)) || ((tempA & 0x02) && (tempA & 0x04) && (tempA & 0x08))){	//If 3 spots are occupied, decrement by 3
-                cntavail = cntavail - 3;
-        }
-	else if(((tempA & 0x01) && (tempA & 0x02)) || ((tempA & 0x01) && (tempA & 0x04)) || ((tempA & 0x01) && (tempA & 0x08)) || ((tempA & 0x02) && (tempA & 0x04)) || ((tempA & 0x02) && (tempA & 0x08)) || ((tempA & 0x04) && (tempA & 0x08))){ //If 2 spots are occupied, decrement by 2
-                cntavail = cntavail - 2;
-        }
-	else if((tempA & 0x01) || (tempA & 0x02) || (tempA & 0x04) || (tempA & 0x08)){	//If 1 spots are occupied, decrement by 1
-                cntavail = cntavail - 1;
-        }
-	else{
-		//Does nothing cntavail is 4
-	}
-*/
 	if(tempA & 0x01){
 		cntavail = cntavail - 0x01;
 	}
