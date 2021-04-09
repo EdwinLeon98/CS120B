@@ -27,7 +27,10 @@ int main(void) {
 	tempA = PINA & 0x0F;
 
 	//2) Perform Computation
-	if(tempA == 0x01 || tempA == 0x02){
+	if(tempA == 0x00){
+		tempC = 0x40;
+	}
+     	else if(tempA == 0x01 || tempA == 0x02){
 		tempC = 0x60;	
 	}	
 	else if(tempA == 0x03 || tempA == 0x04){
