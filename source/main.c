@@ -12,15 +12,25 @@
 #include "simAVRHeader.h"
 #endif
 
-enum SM_States {SM_Init, SM_Lit1, SM_Wait1, SM_Lit2, SM_Wait2} SM_State;
+enum SM_States {SM_Start, SM_Init, SM_Lit1, SM_Lit2, SM_Wait1, SM_Wait2} SM_State;
 
 unsigned char TickFunc(unsigned char x, unsigned char y){
 	switch(SM_State){
+		case SM_Start:
+			SM_State = SM_Init;
+			break;
+
 		case SM_Init:
-			SM_State = SM_Lit1;
+			SM_State = SM_Wait1;
+			break;
 
 		case SM_Lit1:
-			SM_State = SM_Wait1;
+			if(!x){
+				SM_State = SM_Wait1;
+			}
+			else{
+				SM_State = SM_Lit1;
+			}
 			break;
 		
 		case SM_Wait1:
@@ -33,7 +43,12 @@ unsigned char TickFunc(unsigned char x, unsigned char y){
 			break;
 
 		case SM_Lit2:
-			SM_State = SM_Wait2;
+			if(!x){
+				SM_State = SM_Wait2;
+			}
+			else{
+				SM_State = SM_Lit2;
+			}
 			break;
 
 		case SM_Wait2:
@@ -46,13 +61,18 @@ unsigned char TickFunc(unsigned char x, unsigned char y){
 			break;
 
 		default:
-			SM_State = SM_Init;
+			SM_State = SM_Start;
 			break;
 	}	
 	
 	switch(SM_State){
-		case SM_Init:
+		case SM_Start:
 			break;
+
+		case SM_Init:
+			y = (y & 0x00) | 0x01;
+			break;
+
 		case SM_Lit1:
 			y = (y & 0x00) | 0x01;
 			break;
@@ -84,14 +104,13 @@ int main(void) {
     unsigned char tempA = 0x00;	//Temporary variable to hold value of A
     unsigned char tempB = 0x00;
 
-    SM_State = SM_Lit1;
     /* Insert your solution below */
-    while (1) {
+    while(1) {
 	//1) Read Input
 	tempA = PINA & 0x01;
 
 	//2) Perform Computation
-	tempB = TickFunc(tempA, tempB);
+	tempB = (TickFunc(tempA, tempB) & 0x03);
 
 	//3) Write Output
 	PORTB = tempB;
