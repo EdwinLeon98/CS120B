@@ -21,17 +21,14 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char B){
 			break;
 		
 		case SM_Wait1:
-			if(A0 && A1){
-				SM_State = SM_Wait1;
-			}
-			else if(A0 && !A1){
+			if(A0 && !A1){
 				SM_State = SM_Inc;
 			}
 			else if(!A0 && A1){
 				SM_State = SM_Dec;
 			}
 			else{
-				SM_State = SM_Reset;
+				SM_State = SM_Wait1;
 			}
 			break;
 
@@ -47,7 +44,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char B){
 				SM_State = SM_Dec;
 			}
 			else{
-				SM_State = SM_Reset;;
+				SM_State = SM_Wait1;
 			}
 			break;
 
@@ -63,7 +60,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char B){
 				SM_State = SM_Inc;
 			}
 			else{
-				SM_State = SM_Reset;;
+				SM_State = SM_Wait1;
 			}
 			break;
 
@@ -87,7 +84,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char B){
 			break;
 
 		case SM_Inc:
-			if(B < 0x0A){
+			if(B < 0x08){
 				B = B + 0x01;
 			}
 			break;
