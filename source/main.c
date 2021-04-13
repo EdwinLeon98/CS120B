@@ -12,10 +12,13 @@
 #include "simAVRHeader.h"
 #endif
 
-enum SM_States {SM_Lit1, SM_Wait1, SM_Lit2, SM_Wait2} SM_State;
+enum SM_States {SM_Init, SM_Lit1, SM_Wait1, SM_Lit2, SM_Wait2} SM_State;
 
 unsigned char TickFunc(unsigned char x, unsigned char y){
 	switch(SM_State){
+		case SM_Init:
+			SM_State = SM_Lit1;
+
 		case SM_Lit1:
 			SM_State = SM_Wait1;
 			break;
@@ -43,11 +46,13 @@ unsigned char TickFunc(unsigned char x, unsigned char y){
 			break;
 
 		default:
-			SM_State = SM_Lit1;
+			SM_State = SM_Init;
 			break;
 	}	
 	
 	switch(SM_State){
+		case SM_Init:
+			break;
 		case SM_Lit1:
 			y = (y & 0x00) | 0x01;
 			break;

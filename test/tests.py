@@ -30,9 +30,13 @@ tests = [ {'description': 'PINA: 0x00, 0x01, 0x00, 0x01 => PORTB: 0x01',
         {'inputs': [('PINA', 0x01)], 'iterations': 2}],
     'expected': [('PORTB',0x01)],
     },
+    {'description': 'PINA: 0x00 => PORTB: 0x01',
+    'steps': [{'inputs': [('PINA', 0x00)], 'iterations': 2}],
+    'expected': [('PORTB',0x01)],
+    },
     ]
 
-watch = ['SM_State', 'tempB']
+#watch = ['SM_State', 'tempB']
 
 # Optionally you can add a set of "watch" variables these need to be global or static and may need
 # to be scoped at the function level (for static variables) if there are naming conflicts. The 
