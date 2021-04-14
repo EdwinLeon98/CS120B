@@ -69,7 +69,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char C){
                         break;
 
 		case SM_Reset:
-			if(A0 && A1){
+		/*	if(A0 && A1){
 				SM_State = SM_Reset;
 			}
 			else if(A0 && !A1){
@@ -81,6 +81,8 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char C){
 			else{
 				SM_State = SM_Wait1;
 			}
+		*/	
+			SM_State = SM_Wait1;	
 			break;
 
 		default:
@@ -144,9 +146,15 @@ int main(void) {
 	//1) Read Input
 	if((PINA & 0x03) == 0x01){
 		tempA0 = PINA & 0x01;
+		if(tempC == 0){
+			tempA1 = PINA & 0x02;
+		}
 	}
         else if((PINA & 0x03) == 0x02){
                 tempA1 = PINA & 0x02;
+	        if(tempC == 0){
+                        tempA0 = PINA & 0x01;
+                }
         }
 	else{
 		tempA0 = PINA & 0x01;
