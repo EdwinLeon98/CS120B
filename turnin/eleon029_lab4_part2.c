@@ -61,7 +61,11 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char B){
 	
 	unsigned char count = 0;	
 	switch(SM_State){
+		case SM_Start:
+			break;
+
 		case SM_Init:
+			B = 0x07;
 			break;
 
 		case SM_Wait1:
@@ -100,8 +104,6 @@ int main(void) {
     unsigned char tempA1 = 0x00;
     unsigned char tempB = 0x00;
 
-    SM_State = SM_Start;
-    tempB = 0x07;
     /* Insert your solution below */
     while(1) {
 	//1) Read Input
