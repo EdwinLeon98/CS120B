@@ -12,12 +12,16 @@
 #include "simAVRHeader.h"
 #endif
 
-enum SM_States { SM_Init, SM_PressInc, SM_PressDec, SM_Wait1, SM_Depressed} SM_State;
+enum SM_States {SM_Start, SM_Init, SM_PressInc, SM_PressDec, SM_Wait1} SM_State;
 
 unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char B){
 	switch(SM_State){
+		case SM_Start:
+			SM_State = SM_Init;
+			break;
+
 		case SM_Init:
-			SM_State = SM_Wait1;;
+			SM_State = SM_Wait1;
 			break;
 		
 		case SM_Wait1:
@@ -33,46 +37,49 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char B){
 			break;
 
 		case SM_PressInc:
-			SM_State = SM_Depressed;
-			break;
-		
-		case SM_PressDec:
-			SM_State = SM_Depressed;
-			break;
-		
-		case SM_Depressed:
-			if(A0 || A1){
-				SM_State = SM_Depressed;
+			if(A0){
+				SM_State = SM_PressInc;
 			}
 			else{
 				SM_State = SM_Wait1;
 			}
+			break;
+		
+		case SM_PressDec:
+			if(A1){
+				SM_State = SM_PressDec;
+			}
+			else{
+				SM_State = SM_Wait1;
+			}
+			break;
 
 		default:
-			SM_State = SM_Init;
+			SM_State = SM_Start;
 			break;
 	}	
 	
+	unsigned char count = 0;	
 	switch(SM_State){
 		case SM_Init:
 			break;
 
 		case SM_Wait1:
+			count = 0;
 			break;
 
 		case SM_PressInc:
-			if(B < 0x08){
+			if(B < 0x08 && count == 0){
 				B = B + 0x01;
+				count++;
 			}
 			break;
 	
 		case SM_PressDec:
-			if(B > 0x00){
+			if(B > 0x00 && count == 0){
 				B = B - 0x01;
+				count++;
 			}
-			break;
-
-		case SM_Depressed:
 			break;
 
 		default:
@@ -93,7 +100,7 @@ int main(void) {
     unsigned char tempA1 = 0x00;
     unsigned char tempB = 0x00;
 
-    SM_State = SM_Init;
+    SM_State = SM_Start;
     tempB = 0x07;
     /* Insert your solution below */
     while(1) {
