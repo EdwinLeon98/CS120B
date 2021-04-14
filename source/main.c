@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum SM_States {SM_Start, SM_Init, SM_PressInc, SM_PressDec, SM_Wait1} SM_State;
+enum SM_States {SM_Start, SM_Init, SM_PressInc, SM_PressDec, SM_Wait1, SM_WaitInc, SM_WaitDec} SM_State;
 
 unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char C){
 	switch(SM_State){
@@ -37,29 +37,35 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char C){
 			break;
 
 		case SM_PressInc:
-			if(A0){
-				SM_State = SM_PressInc;
-			}
-			else{
-				SM_State = SM_Wait1;
-			}
+			SM_State = SM_WaitInc;
 			break;
 		
 		case SM_PressDec:
-			if(A1){
-				SM_State = SM_PressDec;
-			}
-			else{
-				SM_State = SM_Wait1;
-			}
+			SM_State = SM_WaitDec;
 			break;
 
+		case SM_WaitInc: 
+                        if(A0){
+                                SM_State = SM_WaitInc;
+                        }
+                        else{
+                                SM_State = SM_Wait1;
+                        }
+			break;
+
+                case SM_WaitDec:
+                        if(A1){
+                                SM_State = SM_WaitDec;
+                        }
+                        else{
+                                SM_State = SM_Wait1;
+                        }
+                        break;
 		default:
 			SM_State = SM_Start;
 			break;
 	}	
 	
-	unsigned char count = 0;	
 	switch(SM_State){
 		case SM_Start:
 			break;
@@ -69,22 +75,25 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char C){
 			break;
 
 		case SM_Wait1:
-			count = 0;
 			break;
 
 		case SM_PressInc:
-			if(C < 0x08 && count == 0){
+			if(C < 0x08){
 				C = C + 0x01;
-				count++;
 			}
 			break;
-	
-		case SM_PressDec:
-			if(C > 0x00 && count == 0){
-				C = C - 0x01;
-				count++;
-			}
+
+                case SM_PressDec:
+                        if(C > 0x00){
+                                C = C - 0x01;
+                        }
+                        break;
+
+		case SM_WaitInc:
 			break;
+
+                case SM_WaitDec:
+                        break;
 
 		default:
 			break; 			
@@ -111,7 +120,7 @@ int main(void) {
 	tempA1 = PINA & 0x02;
 
 	//2) Perform Computation
-	tempC = (TickFunc(tempA0, tempA1, tempC) & 0x0F);
+	tempC = TickFunc(tempA0, tempA1, tempC);
 
 	//3) Write Output
 	PORTC = tempC;

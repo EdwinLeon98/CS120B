@@ -23,7 +23,7 @@
 # An example set of tests is shown below. It is important to note that these tests are not "unit tests" in 
 # that they are not ran in isolation but in the order shown and the state of the device is not reset or 
 # altered in between executions (unless preconditions are used).
-tests = [{'description': 'PINA: 0x0 => PORTC: 0x07',
+tests = [{'description': 'PINA: 0x00 => PORTC: 0x07',
     'steps': [{'inputs': [('PINA', 0x00)], 'iterations': 2}],
     'expected': [('PORTC',0x07)],
     },
