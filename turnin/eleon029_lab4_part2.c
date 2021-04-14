@@ -142,9 +142,16 @@ int main(void) {
     /* Insert your solution below */
     while(1) {
 	//1) Read Input
-	tempA0 = PINA & 0x01;
-	tempA1 = PINA & 0x02;
-
+	if((PINA & 0x03) == 0x01){
+		tempA0 = PINA & 0x01;
+	}
+        else if((PINA & 0x03) == 0x02){
+                tempA1 = PINA & 0x02;
+        }
+	else{
+		tempA0 = PINA & 0x01;
+                tempA1 = PINA & 0x02;
+	}
 	//2) Perform Computation
 	tempC = TickFunc(tempA0, tempA1, tempC);
 
