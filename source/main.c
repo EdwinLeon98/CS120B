@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum SM_States {SM_Start, SM_Init,  SM_Release, SM_Code, SM_Unlocked, SM_Locked} SM_State;
+enum SM_States {SM_Start, SM_Init,  SM_Release1,  SM_Code, SM_Unlocked, SM_Locked} SM_State;
 
 unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, unsigned char A7, unsigned char B){
 	switch(SM_State){
@@ -24,9 +24,9 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 			SM_State = SM_Locked;
 			break;
 		
-		case SM_Release:
+		case SM_Release1:
 			if(A2){
-				SM_State = SM_Release;
+				SM_State = SM_Release1;
 			}
 			else if(!A2){
 				SM_State = SM_Code;
@@ -35,7 +35,16 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 				SM_State = SM_Locked;
 			}
 			break;
-		
+
+/*		case SM_Release2:
+			if(A1){
+				SM_State = SM_Release2;
+			}
+			else{
+				SM_State = SM_Unlocked;
+			}
+			break;
+*/
 		case SM_Code:
 			if(A1){
 				SM_State = SM_Unlocked;
@@ -59,7 +68,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 
 		case SM_Locked:
 			if(A2){
-				SM_State = SM_Release;
+				SM_State = SM_Release1;
 			}	
 			else{
 				SM_State = SM_Locked;
@@ -82,8 +91,11 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 			B = 0x00;
 			break;
 
-		case SM_Release:
+		case SM_Release1:
 			break;
+
+//		case SM_Release2:
+//			break;
 
                 case SM_Code:
                         break;
@@ -115,11 +127,22 @@ int main(void) {
     /* Insert your solution below */
     while(1) {
 	//1) Read Input
-	tempA0 = PINA & 0x01;
-	tempA1 = PINA & 0x02;
-	tempA2 = PINA & 0x04;
-	tempA7 = PINA & 0x80;
-                
+	if((PINA & 0xFF) == 0x01){
+		tempA0 = PINA & 0x01;	
+	}
+	else if((PINA & 0xFF) == 0x02){
+                tempA1 = PINA & 0x02;
+        }
+	else if((PINA & 0xFF) == 0x04){
+                tempA2 = PINA & 0x04;
+        }
+	else{
+                tempA0 = PINA & 0x01;
+                tempA1 = PINA & 0x02;
+                tempA2 = PINA & 0x04;
+                tempA7 = PINA & 0x80;
+        }
+
 	//2) Perform Computation
 	tempB = TickFunc(tempA0, tempA1, tempA2, tempA7, tempB);
 

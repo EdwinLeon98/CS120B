@@ -37,6 +37,11 @@ tests = [{'description': 'PINA: 0x00 => PORTB: 0x00',
     'steps': [{'inputs': [('PINA', 0x80)], 'iterations': 2}],
     'expected': [('PORTB',0x00)],
     },
+    {'description': 'PINA: 0x04, 0x02 => PORTB: 0x00',
+    'steps': [{'inputs': [('PINA', 0x04)], 'iterations': 2},
+        {'inputs': [('PINA', 0x02)], 'iterations': 2}],
+    'expected': [('PORTB',0x00)],
+    },
     ]
 watch = ['SM_State', 'tempA0', 'tempA1', 'tempA2', 'tempA7', 'tempB']
 # Optionally you can add a set of "watch" variables these need to be global or static and may need
