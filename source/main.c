@@ -53,7 +53,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
                                 SM_State = SM_Locked;
                         }
                         else{
-                                SM_State = SM_Unlocked;;
+                                SM_State = SM_Unlocked;
                         }
 			break;
 
@@ -79,6 +79,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 			break;
 
 		case SM_Locked:
+			B = 0x00;
 			break;
 
 		case SM_Release:
@@ -88,7 +89,7 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
                         break;
 
 		case SM_Unlocked:
-			B = (B & 0x00) | 0x01;
+			B = (B & 0x00) | 0x01;;
 			break;
 
 		default:
