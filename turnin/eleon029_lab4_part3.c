@@ -25,10 +25,10 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 			break;
 		
 		case SM_Release1:
-			if(A2){
+			if(A2 && !A0 && !A1){
 				SM_State = SM_Release1;
 			}
-			else if(!A2){
+			else if(!A2 && !A0 && !A1){
 				SM_State = SM_Code;
 			}
 			else{
@@ -123,19 +123,37 @@ int main(void) {
     unsigned char tempA2 = 0x00;
     unsigned char tempA7 = 0x00;
     unsigned char tempB = 0x00;
-
+    unsigned char tempA = 0x00;
     /* Insert your solution below */
     while(1) {
 	//1) Read Input
 	if((PINA & 0xFF) == 0x01){
-		tempA0 = PINA & 0x01;	
+		tempA0 = PINA & 0x01;
+		if((tempA - tempA0) == 0x02){
+			tempA1 = 0x00;
+		}
+		if((tempA - tempA1) == 0x04){
+                        tempA2 = 0x00;
+                }            	
 	}
 	else if((PINA & 0xFF) == 0x02){
                 tempA1 = PINA & 0x02;
+                if((tempA - tempA1) == 0x01){
+                        tempA0 = 0x00;
+                }
+		if((tempA - tempA1) == 0x04){
+			tempA2 = 0x00;
+		}
         }
 	else if((PINA & 0xFF) == 0x04){
                 tempA2 = PINA & 0x04;
-        }
+                if((tempA - tempA1) == 0x02){
+                        tempA1 = 0x00;
+                }
+                if((tempA - tempA0) == 0x01){
+                        tempA0 = 0x00;
+                }
+	}
 	else{
                 tempA0 = PINA & 0x01;
                 tempA1 = PINA & 0x02;
@@ -145,7 +163,7 @@ int main(void) {
 
 	//2) Perform Computation
 	tempB = TickFunc(tempA0, tempA1, tempA2, tempA7, tempB);
-
+	tempA = PINA & 0xFF;
 	//3) Write Output
 	PORTB = tempB;
     }
