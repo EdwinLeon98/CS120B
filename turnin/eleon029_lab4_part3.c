@@ -40,6 +40,9 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 			if(A1){
 				SM_State = SM_Unlocked;
 			}
+			else if(!A0 && !A1 && !A2){
+				SM_State = SM_Code;
+			}
 			else{
 				SM_State = SM_Locked;
 			}
