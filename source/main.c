@@ -70,14 +70,14 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 
 		case SM_Unlocked:
 			if(A7){
-				SM_State = SM_WaitLocked;
+				SM_State = SM_Locked;
 			}	
 			else{
 				SM_State = SM_Unlocked;
 			}
 			break;
 
-		case SM_WaitLocked:
+/*		case SM_WaitLocked:
 			if(A7){
 				SM_State = SM_WaitLocked;
 			}
@@ -85,9 +85,14 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 				SM_State = SM_Locked;
 			}
 			break;
-
+*/
 		case SM_Locked:
-			SM_State = SM_Wait;
+			if(A7){
+				SM_State = SM_Locked;
+			}
+			else{
+				SM_State = SM_Wait;
+			}
 			break;
 
 		default:
