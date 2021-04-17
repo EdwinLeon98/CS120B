@@ -12,67 +12,82 @@
 #include "simAVRHeader.h"
 #endif
 
-enum SM_States {SM_Start, SM_Init,  SM_Release1,  SM_Code, SM_Unlocked, SM_Locked} SM_State;
+enum SM_States {SM_Start, SM_Wait,  SM_PressA2,  SM_WaitCode, SM_Code, SM_WaitUnlocked, SM_Unlocked, SM_WaitLocked, SM_Locked} SM_State;
 
 unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, unsigned char A7, unsigned char B){
 	switch(SM_State){
 		case SM_Start:
-			SM_State = SM_Init;
+			SM_State = SM_Wait;
 			break;
 
-		case SM_Init:
-			SM_State = SM_Locked;
+		case SM_Wait:
+			if(!A0 && !A1 && A2 && !A7){
+				SM_State = SM_PressA2;
+			}
+			else if(A7){
+				SM_State = SM_Locked;
+			}
+			else{
+				SM_State = SM_Wait;
+			}
 			break;
 		
-		case SM_Release1:
-			if(A2 && !A0 && !A1){
-				SM_State = SM_Release1;
+		case SM_PressA2:
+			if(!A0 && !A1 && A2 && !A7){
+				SM_State = SM_PressA2;
 			}
-			else if(!A2 && !A0 && !A1){
-				SM_State = SM_Code;
-			}
-			else{
-				SM_State = SM_Locked;
-			}
-			break;
-
-/*		case SM_Release2:
-			if(A1){
-				SM_State = SM_Release2;
-			}
-			else{
-				SM_State = SM_Unlocked;
-			}
-			break;
-*/
-		case SM_Code:
-			if(A1){
-				SM_State = SM_Unlocked;
-			}
-			else if(!A0 && !A1 && !A2){
-				SM_State = SM_Code;
+			else if(!A0 && !A1 && !A2 && !A7){
+				SM_State = SM_WaitCode;
 			}
 			else{
 				SM_State = SM_Locked;
 			}
 			break;
 
-		case SM_Unlocked: 
-                        if(A7){
-                                SM_State = SM_Locked;
+		case SM_WaitCode:
+			if(!A0 && A1 && !A2 && !A7){
+				SM_State = SM_Code;
+			}
+			else if(!A0 && !A1 && !A2 && !A7){
+				SM_State = SM_WaitCode;
+			}
+			else{
+				SM_State = SM_Locked;
+			}
+			break;
+
+		case SM_Code: 
+                        if(!A0 && A1 && !A2 && !A7){
+                                SM_State = SM_Code;
                         }
-                        else{
+                        else if(!A0 && !A1 && !A2 && !A7){
                                 SM_State = SM_Unlocked;
                         }
+			else{
+				SM_State = SM_Locked;
+			}
+			break;
+
+		case SM_Unlocked:
+			if(A7){
+				SM_State = SM_WaitLocked;
+			}	
+			else{
+				SM_State = SM_Unlocked;
+			}
+			break;
+
+		case SM_WaitLocked:
+			if(A7){
+				SM_State = SM_WaitLocked;
+			}
+			else{
+				SM_State = SM_Locked;
+			}
 			break;
 
 		case SM_Locked:
-			if(A2){
-				SM_State = SM_Release1;
-			}	
-			else{
-				SM_State = SM_Locked;
-			}
+			SM_State = SM_Wait;
 			break;
 
 		default:
@@ -82,26 +97,30 @@ unsigned char TickFunc(unsigned char A0, unsigned char A1, unsigned char A2, uns
 	
 	switch(SM_State){
 		case SM_Start:
+			B = B & 0x00;
 			break;
 
-		case SM_Init:
+		case SM_Wait:
 			break;
 
-		case SM_Locked:
-			B = 0x00;
+		case SM_PressA2:
 			break;
 
-		case SM_Release1:
+		case SM_WaitCode:
 			break;
-
-//		case SM_Release2:
-//			break;
 
                 case SM_Code:
                         break;
 
 		case SM_Unlocked:
-			B = (B & 0x00) | 0x01;;
+			B = (B & 0x00) | 0x01;
+			break;
+
+		case SM_WaitLocked:
+			break;
+
+		case SM_Locked:
+			B = B & 0x00;
 			break;
 
 		default:
