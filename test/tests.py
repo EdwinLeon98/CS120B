@@ -1,7 +1,7 @@
 #      Author & Email: Edwin M. Leon Du, eleon029@ucr.edu
 #      Partner(s) Name: 
 #      Lab Section: 23
-#      Assignment: Lab 4  Exercise 4
+#      Assignment: Lab 4  Exercise 5
 #      Exercise Description: Door lock exercise tests
 #
 #      I acknowledge all content contained herein, excluding template or example
